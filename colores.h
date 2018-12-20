@@ -2,6 +2,7 @@
 #ifndef COLORES_H
 #define	COLORES_H
 
+
 // http://stackoverflow.com/questions/3219393/stdlib-and-colored-output-in-c
 // http://ascii-table.com/ansi-escape-sequences.php
 
@@ -36,4 +37,3 @@ void printf_reset_color();
 // void clear_screen();
 
 #endif	/* COLORES_H */
-
