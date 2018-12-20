@@ -35,7 +35,7 @@ t_plano tab= {"    #####",
                   "    #     #########",
                   "    #######",
                   "; Nivel medio",
-                  ""};*/
+                  ""};
 void imprimir_tablero(partida p){
   for(int i = 0; i < MAX_F; i++){
     for(int j = 0; j < MAX_C; j++){
@@ -56,11 +56,17 @@ bool mover(partida *p, int tecla){
       if(p->t.c[posx-1][posy].tipo == CAJA && p->t.c[posx-2][posy].tipo == SUELO){  //Si lo de encima es caja y lo siguiente suelo
         res = mover_jugador_caja(p, tecla);
       }
-      else if(p->t.c[posx][posy+1].tipo == CAJA && p->t.c[posx][posy+2].tipo == GOAL){
-        //res = mover_jugador_caja_obj(p, tecla);
+      else if(p->t.c[posx-1][posy].tipo == CAJA && p->t.c[posx-2][posy].tipo == GOAL){
+        res = mover_jugador_caja_obj(p, tecla);
       }
       else if(p->t.c[posx-1][posy].tipo == SUELO){
         res = mover_jugador(p, tecla);
+      }
+      else if(p->t.c[posx-1][posy].tipo == CAJA_COMPLET && p->t.c[posx-2][posy].tipo == SUELO){
+        res = mover_caja_fueraobj(p, tecla);
+      }
+      else if(p->t.c[posx-1][posy].tipo == CAJA_COMPLET && p->t.c[posx-2][posy].tipo == GOAL){
+        res = mover_caja_entreobj(p, tecla);
       }
     }
   }
@@ -69,11 +75,17 @@ bool mover(partida *p, int tecla){
       if(p->t.c[posx+1][posy].tipo == CAJA && p->t.c[posx+2][posy].tipo == SUELO){  //Si lo de encima es caja y lo siguiente suelo
         res = mover_jugador_caja(p, tecla);
       }
-      else if(p->t.c[posx][posy-1].tipo == CAJA && p->t.c[posx][posy-2].tipo == GOAL){
-        //res = mover_jugador_caja_obj(p, tecla);
+      else if(p->t.c[posx+1][posy].tipo == CAJA && p->t.c[posx+2][posy].tipo == GOAL){
+        res = mover_jugador_caja_obj(p, tecla);
       }
       else if(p->t.c[posx+1][posy].tipo == SUELO){
         res = mover_jugador(p, tecla);
+      }
+      else if(p->t.c[posx+1][posy].tipo == CAJA_COMPLET && p->t.c[posx+2][posy].tipo == SUELO){
+        res = mover_caja_fueraobj(p, tecla);
+      }
+      else if(p->t.c[posx+1][posy].tipo == CAJA_COMPLET && p->t.c[posx+2][posy].tipo == GOAL){
+        res = mover_caja_entreobj(p, tecla);
       }
     }
   }
@@ -82,11 +94,17 @@ bool mover(partida *p, int tecla){
       if(p->t.c[posx][posy-1].tipo == CAJA && p->t.c[posx][posy-2].tipo == SUELO){  //Si lo de encima es caja y lo siguiente suelo
         res = mover_jugador_caja(p, tecla);
       }
-      else if(p->t.c[posx-1][posy].tipo == CAJA && p->t.c[posx+2][posy].tipo == GOAL){
-        //res = mover_jugador_caja_obj(p, tecla);
+      else if(p->t.c[posx][posy-1].tipo == CAJA && p->t.c[posx][posy-2].tipo == GOAL){
+        res = mover_jugador_caja_obj(p, tecla);
       }
       else if(p->t.c[posx][posy-1].tipo == SUELO){     //No llegeix el espai
         res = mover_jugador(p, tecla);  //
+      }
+      else if(p->t.c[posx][posy-1].tipo == CAJA_COMPLET && p->t.c[posx][posy-2].tipo == SUELO){
+        res = mover_caja_fueraobj(p, tecla);
+      }
+      else if(p->t.c[posx][posy-1].tipo == CAJA_COMPLET && p->t.c[posx][posy-2].tipo == GOAL){
+        res = mover_caja_entreobj(p, tecla);
       }
     }
   }
@@ -95,11 +113,17 @@ bool mover(partida *p, int tecla){
       if(p->t.c[posx][posy+1].tipo == CAJA && p->t.c[posx][posy+2].tipo == SUELO){  //Si lo de encima es caja y lo siguiente suelo
         res = mover_jugador_caja(p, tecla);
       }
-      else if(p->t.c[posx-1][posy].tipo == CAJA && p->t.c[posx-2][posy].tipo == GOAL){
-        //res = mover_jugador_caja_obj(p, tecla);
+      else if(p->t.c[posx][posy+1].tipo == CAJA && p->t.c[posx][posy+2].tipo == GOAL){
+        res = mover_jugador_caja_obj(p, tecla);
       }
       else if(p->t.c[posx][posy+1].tipo == SUELO){
         res = mover_jugador(p, tecla);
+      }
+      else if(p->t.c[posx][posy+1].tipo == CAJA_COMPLET && p->t.c[posx][posy+2].tipo == SUELO){
+        res = mover_caja_fueraobj(p, tecla);
+      }
+      else if(p->t.c[posx][posy+1].tipo == CAJA_COMPLET && p->t.c[posx][posy+2].tipo == GOAL){
+        res = mover_caja_entreobj(p, tecla);
       }
     }
   }
@@ -119,22 +143,23 @@ bool mover_jugador(partida *p, int t){
 
     p->jug_x--;
   }
-  if(t == 2){
+  else if(t == 2){
     p->t.c[posx+1][posy].tipo = p->t.c[posx][posy].tipo;
     p->t.c[posx][posy].tipo = SUELO;
     p->jug_x++;
 
   }
-  if(t == 3){
+  else if(t == 3){
     p->t.c[posx][posy-1].tipo = p->t.c[posx][posy].tipo;
     p->t.c[posx][posy].tipo = SUELO;
     p->jug_y--;
   }
-  if(t == 4){
+  else if(t == 4){
     p->t.c[posx][posy+1].tipo = p->t.c[posx][posy].tipo;
     p->t.c[posx][posy].tipo = SUELO;
     p->jug_y++;
   }
+  p->t.movimientos++;
   return true;
 }
 void empezar_partida(partida *par, t_plano tablero){
@@ -169,35 +194,157 @@ void empezar_partida(partida *par, t_plano tablero){
 bool mover_jugador_caja(partida *p, int t){
   int posx = p->jug_x;
   int posy = p->jug_y;
-  char aux1;
-  char aux2;
+
   if(t == 1){
     p->t.c[posx-2][posy].tipo = p->t.c[posx-1][posy].tipo;
     p->t.c[posx-1][posy].tipo = p->t.c[posx][posy].tipo;
     p->t.c[posx][posy].tipo = SUELO;
     p->jug_x--;
   }
-  if(t == 2){
+  else if(t == 2){
     p->t.c[posx+2][posy].tipo = p->t.c[posx+1][posy].tipo;
     p->t.c[posx+1][posy].tipo = p->t.c[posx][posy].tipo;
     p->t.c[posx][posy].tipo = SUELO;
     p->jug_x++;
   }
-  if(t == 3){
+  else if(t == 3){
     p->t.c[posx][posy-2].tipo = p->t.c[posx][posy-1].tipo;
     p->t.c[posx][posy-1].tipo = p->t.c[posx][posy].tipo;
     p->t.c[posx][posy].tipo = SUELO;
     p->jug_y--;
   }
-  if(t == 4){
+  else if(t == 4){
     p->t.c[posx][posy+2].tipo = p->t.c[posx][posy+1].tipo;
     p->t.c[posx][posy+1].tipo = p->t.c[posx][posy].tipo;
     p->t.c[posx][posy].tipo = SUELO;
     p->jug_y++;
   }
+  p->t.empujones++;
+  p->t.movimientos++;
   return true;
 }
 
+bool mover_jugador_caja_obj(partida *p, int t){
+    int posx = p->jug_x;
+    int posy = p->jug_y;
+
+    //Tecla hacia arriba
+
+    if(t == 1){
+      p->t.c[posx-2][posy].tipo = CAJA_COMPLET;
+      p->t.c[posx-1][posy].tipo = JUGADOR;
+      p->t.c[posx][posy].tipo = SUELO;
+      p->jug_x--;
+      p->t.cajas_dentro++;
+      p->t.cajas_fuera--;
+    }
+    else if(t == 2){
+      p->t.c[posx+2][posy].tipo = CAJA_COMPLET;
+      p->t.c[posx+1][posy].tipo = JUGADOR;
+      p->t.c[posx][posy].tipo = SUELO;
+      p->jug_x++;
+      p->t.cajas_dentro++;
+      p->t.cajas_fuera--;
+    }
+    else if(t == 3){
+      p->t.c[posx][posy-2].tipo = CAJA_COMPLET;
+      p->t.c[posx][posy-1].tipo = JUGADOR;
+      p->t.c[posx][posy].tipo = SUELO;
+      p->jug_y--;
+      p->t.cajas_dentro++;
+      p->t.cajas_fuera--;
+    }
+    else if(t == 4){
+      p->t.c[posx][posy+2].tipo = CAJA_COMPLET;
+      p->t.c[posx][posy+1].tipo = JUGADOR;
+      p->t.c[posx][posy].tipo = SUELO;
+      p->jug_y++;
+      p->t.cajas_dentro++;
+      p->t.cajas_fuera--;
+    }
+    p->t.empujones++;
+    p->t.movimientos++;
+    return true;
+}
+
+
+bool mover_caja_fueraobj(partida *p, int t){
+    int posx = p->jug_x;
+    int posy = p->jug_y;
+
+    //Tecla hacia arriba
+
+    if(t == 1){
+      p->t.c[posx-2][posy].tipo = CAJA;
+      p->t.c[posx-1][posy].tipo = JUGADOR_CAJA;
+      p->t.c[posx][posy].tipo = SUELO;
+      p->jug_x--;
+      p->t.cajas_dentro--;
+      p->t.cajas_fuera++;
+    }
+    else if(t == 2){
+      p->t.c[posx+2][posy].tipo = CAJA;
+      p->t.c[posx+1][posy].tipo = JUGADOR_CAJA;
+      p->t.c[posx][posy].tipo = SUELO;
+      p->jug_x++;
+      p->t.cajas_dentro--;
+      p->t.cajas_fuera++;
+    }
+    else if(t == 3){
+      p->t.c[posx][posy-2].tipo = CAJA;
+      p->t.c[posx][posy-1].tipo = JUGADOR_CAJA;
+      p->t.c[posx][posy].tipo = SUELO;
+      p->jug_y--;
+      p->t.cajas_dentro--;
+      p->t.cajas_fuera++;
+    }
+    else if(t == 4){
+      p->t.c[posx][posy+2].tipo = CAJA;
+      p->t.c[posx][posy+1].tipo = JUGADOR_CAJA;
+      p->t.c[posx][posy].tipo = SUELO;
+      p->jug_y++;
+      p->t.cajas_dentro--;
+      p->t.cajas_fuera++;
+    }
+    p->t.empujones++;
+    p->t.movimientos++;
+    return true;
+}
+
+bool mover_caja_entreobj(partida *p, int t){
+    int posx = p->jug_x;
+    int posy = p->jug_y;
+
+    //Tecla hacia arriba
+
+    if(t == 1){
+      p->t.c[posx-2][posy].tipo = CAJA_COMPLET;
+      p->t.c[posx-1][posy].tipo = JUGADOR_CAJA;
+      p->t.c[posx][posy].tipo = SUELO;
+      p->jug_x--;
+    }
+    else if(t == 2){
+      p->t.c[posx+2][posy].tipo = CAJA_COMPLET;
+      p->t.c[posx+1][posy].tipo = JUGADOR_CAJA;
+      p->t.c[posx][posy].tipo = SUELO;
+      p->jug_x++;
+    }
+    else if(t == 3){
+      p->t.c[posx][posy-2].tipo = CAJA_COMPLET;
+      p->t.c[posx][posy-1].tipo = JUGADOR_CAJA;
+      p->t.c[posx][posy].tipo = SUELO;
+      p->jug_y--;
+    }
+    else if(t == 4){
+      p->t.c[posx][posy+2].tipo = CAJA_COMPLET;
+      p->t.c[posx][posy+1].tipo = JUGADOR_CAJA;
+      p->t.c[posx][posy].tipo = SUELO;
+      p->jug_y++;
+    }
+    p->t.empujones++;
+    p->t.movimientos++;
+    return true;
+}
 
 int main(){
   partida p;
@@ -219,3 +366,4 @@ int main(){
       pos = lee_tecla();
     }
 }
+

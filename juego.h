@@ -22,4 +22,7 @@ void imprimir_tablero(partida p);
 bool mover(partida *p, int tecla);
 bool mover_jugador(partida *p, int tecla);
 bool mover_jugador_caja(partida *p, int tecla);
+bool mover_jugador_caja_obj(partida *p, int tecla);
+bool mover_caja_fueraobj(partida *p,int tecla);
+bool mover_caja_entreobj(partida *p, int tecla);
 #endif
