@@ -35,8 +35,9 @@ t_plano tab= {"    #####",
                   "    #     #########",
                   "    #######",
                   "; Nivel medio",
-                  ""};*/
+                  ""};
 void imprimir_tablero(partida p){
+  printf("Pulsa las flechas para moverte. Restart 'r'. Quit 'q'.\nGoles: %d    Cajas_en_goles: %d\n num_pasos: %d    num_empujes: %d\n",p.t.goles,p.t.cajas_en_goles,p.t.num_pasos,p.t.num_empujes);
   for(int i = 0; i < MAX_F; i++){
     for(int j = 0; j < MAX_C; j++){
       printf("%c",p.t.c[i][j].tipo);
@@ -55,9 +56,11 @@ bool mover(partida *p, int tecla){
     if(p->t.c[posx-1][posy].tipo != PARED){           //Si hacia arriba no tenemos pared
       if(p->t.c[posx-1][posy].tipo == CAJA && p->t.c[posx-2][posy].tipo == SUELO){  //Si lo de encima es caja y lo siguiente suelo
         res = mover_jugador_caja(p, tecla);
+        p->t.num_empujes++;
       }
       else if(p->t.c[posx][posy+1].tipo == CAJA && p->t.c[posx][posy+2].tipo == GOAL){
         //res = mover_jugador_caja_obj(p, tecla);
+        //p->t.num_empujes++;
       }
       else if(p->t.c[posx-1][posy].tipo == SUELO){
         res = mover_jugador(p, tecla);
@@ -68,9 +71,11 @@ bool mover(partida *p, int tecla){
     if(p->t.c[posx+1][posy].tipo != PARED){           //Si hacia arriba no tenemos pared
       if(p->t.c[posx+1][posy].tipo == CAJA && p->t.c[posx+2][posy].tipo == SUELO){  //Si lo de encima es caja y lo siguiente suelo
         res = mover_jugador_caja(p, tecla);
+        p->t.num_empujes++;
       }
       else if(p->t.c[posx][posy-1].tipo == CAJA && p->t.c[posx][posy-2].tipo == GOAL){
         //res = mover_jugador_caja_obj(p, tecla);
+        //p->t.num_empujes++;
       }
       else if(p->t.c[posx+1][posy].tipo == SUELO){
         res = mover_jugador(p, tecla);
@@ -81,9 +86,11 @@ bool mover(partida *p, int tecla){
     if(p->t.c[posx][posy-1].tipo != PARED){           //Si hacia arriba no tenemos pared
       if(p->t.c[posx][posy-1].tipo == CAJA && p->t.c[posx][posy-2].tipo == SUELO){  //Si lo de encima es caja y lo siguiente suelo
         res = mover_jugador_caja(p, tecla);
+        p->t.num_empujes++;
       }
       else if(p->t.c[posx-1][posy].tipo == CAJA && p->t.c[posx+2][posy].tipo == GOAL){
         //res = mover_jugador_caja_obj(p, tecla);
+        //p->t.num_empujes++;
       }
       else if(p->t.c[posx][posy-1].tipo == SUELO){     //No llegeix el espai
         res = mover_jugador(p, tecla);  //
@@ -94,9 +101,11 @@ bool mover(partida *p, int tecla){
     if(p->t.c[posx][posy+1].tipo != PARED){           //Si hacia arriba no tenemos pared
       if(p->t.c[posx][posy+1].tipo == CAJA && p->t.c[posx][posy+2].tipo == SUELO){  //Si lo de encima es caja y lo siguiente suelo
         res = mover_jugador_caja(p, tecla);
+        p->t.num_empujes++;
       }
       else if(p->t.c[posx-1][posy].tipo == CAJA && p->t.c[posx-2][posy].tipo == GOAL){
         //res = mover_jugador_caja_obj(p, tecla);
+        //p->t.num_empujes++;
       }
       else if(p->t.c[posx][posy+1].tipo == SUELO){
         res = mover_jugador(p, tecla);
@@ -139,15 +148,14 @@ bool mover_jugador(partida *p, int t){
 }
 void empezar_partida(partida *par, t_plano tablero){
   int i,j;
-  par->t.empujones = 0;
-  par->t.movimientos = 0;
-  par->t.cajas_fuera = 0;
-  par->t.cajas_dentro = 0;
+  par->t.num_pasos = 0;
+  par->t.num_empujes = 0;
+  par->t.cajas_en_goles = 0;
+  par->t.goles= 0;
   for(i = 0; i < MAX_F;i++){
     for(j = 0; j < MAX_C;j++){
       if(tablero[i][j] == CAJA){
         par->t.c[i][j].tipo = CAJA;
-        par->t.cajas_fuera++;
       }
       else if(tablero[i][j] == JUGADOR){      //booleano de caja a false
         par->t.c[i][j].tipo = JUGADOR;
@@ -157,6 +165,7 @@ void empezar_partida(partida *par, t_plano tablero){
       }
       else if(tablero[i][j] == GOAL){
         par->t.c[i][j].tipo = GOAL;
+        par->t.goles++;
       }
       else if(tablero[i][j] == SUELO){
         par->t.c[i][j].tipo = SUELO;
@@ -209,13 +218,10 @@ int main(){
   bool ok;
   //scanf("%d%*c", &pos);
     while(pos != 5){
+      p.t.num_pasos++;
       borrar_pantalla();
       ok = mover(&p, pos);
-      if(!ok) printf("Dirección incorrecta.\n");
       imprimir_tablero(p);
-    //  printf("\n");
-      printf("Introduzca el siguiente movimiento:");
-    //  scanf("%d%*c", &pos);
       pos = lee_tecla();
     }
 }

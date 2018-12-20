@@ -7,9 +7,9 @@
 
 typedef struct{
   casilla c[MAX_F][MAX_C];
-  int movimientos;
-  int empujones;
-  int cajas_fuera;
-  int cajas_dentro;
+  int num_pasos;
+  int num_empujes;
+  int cajas_en_goles;
+  int goles;
 }tablero;
 #endif

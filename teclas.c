@@ -1,6 +1,6 @@
 // Este fichero se le da al alumno
 // Testeado con Linux, Mac y Windows con DevC++ (que utiliza MinGw)
- 
+
 // Si dice algo como "conio.h no such header file" mirar:
 	// https://helloacm.com/modern-getch-implementation-on-windows-cc/
 // https://stackoverflow.com/questions/10463201/getch-and-arrow-codes
@@ -148,4 +148,3 @@ int lee_tecla() {
 	// printf("\n");
 	return res;
 }
-

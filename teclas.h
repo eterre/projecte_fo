@@ -75,4 +75,3 @@ void borrar_pantalla();
 int lee_tecla();
 
 #endif // TECLAS_H
-
