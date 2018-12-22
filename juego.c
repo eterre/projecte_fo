@@ -4,8 +4,10 @@
 #include "casilla.h"
 #include "teclas.h"
 #include "tablero.h"
+#include "colores.h"
 
-#define MAX_F 24
+
+#define MAX_F 12
 #define MAX_C 20
 
 #define JUGADOR '@'
@@ -37,9 +39,42 @@ t_plano tab= {"    #####",
                   "; Nivel medio",
                   ""};
 void imprimir_tablero(partida p){
+  printf("Pulse las teclas para moverte. Restart 'r'. Quit 'q'.\n");
+  printf_color(GREEN);
+  printf("Nivel: Nivel Medio.\n");
+  printf_color(WHITE);
+
+  printf("goles: %d    cajas en goles: %d\nnum_pasos: %d   num_empujes: %d\n",p.t.cajas_fuera,p.t.cajas_dentro,p.t.movimientos,p.t.empujones);
   for(int i = 0; i < MAX_F; i++){
     for(int j = 0; j < MAX_C; j++){
-      printf("%c",p.t.c[i][j].tipo);
+      if(p.t.c[i][j].tipo == JUGADOR){
+        printf_color(GREEN);
+        printf("%c",p.t.c[i][j].tipo);
+      }
+      else if(p.t.c[i][j].tipo == PARED){
+        printf_color(RED);
+        printf("%c",p.t.c[i][j].tipo);
+      }
+      else if(p.t.c[i][j].tipo == CAJA){
+        printf_color(YELLOW);
+        printf("%c",p.t.c[i][j].tipo);
+      }
+      else if(p.t.c[i][j].tipo == GOAL){
+        printf_color(BOLD_BLUE);
+        printf("%c",p.t.c[i][j].tipo);
+      }
+      else if(p.t.c[i][j].tipo == SUELO){
+        printf_color(WHITE);
+        printf("%c",p.t.c[i][j].tipo);
+      }
+      else if(p.t.c[i][j].tipo == CAJA_COMPLET){
+        printf_color(BOLD_CYAN);
+        printf("%c",p.t.c[i][j].tipo);
+      }
+      else if(p.t.c[i][j].tipo == JUGADOR_CAJA){
+        printf_color(BOLD_CYAN);
+        printf("%c",p.t.c[i][j].tipo);
+            }
     }
     printf("\n");
   }
@@ -178,7 +213,6 @@ void empezar_partida(partida *par, t_plano tablero){
         par->t.c[i][j].tipo = JUGADOR;
         par->jug_x = i;
         par->jug_y = j;
-        printf("\nx: %d y: %d\n", par->jug_x, par->jug_y);
       }
       else if(tablero[i][j] == GOAL){
         par->t.c[i][j].tipo = GOAL;
@@ -358,12 +392,7 @@ int main(){
     while(pos != 5){
       borrar_pantalla();
       ok = mover(&p, pos);
-      if(!ok) printf("Dirección incorrecta.\n");
       imprimir_tablero(p);
-    //  printf("\n");
-      printf("Introduzca el siguiente movimiento:");
-    //  scanf("%d%*c", &pos);
       pos = lee_tecla();
     }
 }
-

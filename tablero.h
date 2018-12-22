@@ -1,7 +1,7 @@
 #ifndef tablero_h
 #define tablero_h
 
-#define MAX_F 24
+#define MAX_F 12
 #define MAX_C 20
 #include "casilla.h"
 
