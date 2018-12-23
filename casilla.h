@@ -10,7 +10,10 @@
 #define SUELO ' '
 
 typedef struct{
-    char tipo;          //tipo de objeto en la casilla
+    char contenido;          //imprimir de objeto en la casilla
+    char tipo;
+    bool jugador_encima_objetivo;
+    bool caja_en_objetivo;
 }casilla;
 
 

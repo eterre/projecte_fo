@@ -25,4 +25,5 @@ bool mover_jugador_caja(partida *p, int tecla);
 bool mover_jugador_caja_obj(partida *p, int tecla);
 bool mover_caja_fueraobj(partida *p,int tecla);
 bool mover_caja_entreobj(partida *p, int tecla);
+bool mover_jugador_objetivo(partida *p, int tecla);
 #endif
