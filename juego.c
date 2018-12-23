@@ -139,6 +139,7 @@ void imprimir_tablero(partida p){
     }
     printf("\n");
   }
+  if(p.t.cajas_fuera == 0) printf("HAS GANADO");
 }
 
 
